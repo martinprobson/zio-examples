@@ -6,18 +6,14 @@ import doobie.hi.resultset
 
 object RecursionZIO extends ZIOApplication {
 
-  def factorial(n: BigInt): Task[BigInt] =
-    if (n == 0) {
+  def factorial(n: Int): Task[BigInt] =
+    if (n == 0)
       ZIO.succeed(1)
-    } else {
-      for {
-        res <- factorial(n - 1)
-        result <- ZIO.attempt(n * res)
-      } yield result
-    }
+    else
+      factorial(n - 1).flatMap(r => ZIO.attempt(r * n))
 
   def run = for {
-    result <- factorial(BigInt(100000))
+    result <- factorial(10000)
     _ <- ZIO.logInfo(s"Result is $result")
   } yield ()
 
