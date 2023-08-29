@@ -1,6 +1,6 @@
 import Dependencies._
 
-ThisBuild / scalaVersion     := "3.2.1"
+ThisBuild / scalaVersion     := "3.3.0"
 ThisBuild / version          := "0.0.1-SNAPSHOT"
 ThisBuild / organization     := "net.martinprobson"
 
@@ -19,8 +19,6 @@ scalacOptions ++= Seq(
   "-explaintypes",    // Explain type errors in more detail.
   "-Xfatal-warnings" // Fail the compilation if there are any warnings.
 )
-
-javacOptions ++= Seq("-source", "17", "-target", "17", "-Xlint")
 
 assembly / assemblyMergeStrategy := {
   case PathList("META-INF", xs @ _*)       => MergeStrategy.discard
