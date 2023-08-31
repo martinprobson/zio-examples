@@ -23,18 +23,25 @@ object NonBinaryTree extends ZIOApplication {
     "/",
     List(
       Node(
-        "home",
+        "/home",
         List(
           Node(
-            "martinr",
+            "/home/martinr",
             List(
-              Node("vimwiki", List(Node("a", List()), Node("b", List()))),
-              Node("Projects", List(Node("git", List())))
+              Node(
+                "/home/martinr/vimwiki",
+                List(
+                  Node("/home/martinr/vimwiki/a", List()),
+                  Node("/home/martinr/vimwiki/b", List())
+                )
+              ),
+              Node("/home/martinr/Projects", List(Node("/home/martinr/Projects/git", List()))),
+              Node("/home/martinr/temp.txt", List())
             )
           )
         )
       ),
-      Node("swapfile", List())
+      Node("/swapfile", List())
     )
   )
 
