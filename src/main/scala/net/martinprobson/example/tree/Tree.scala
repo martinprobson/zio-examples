@@ -9,7 +9,7 @@ object Tree extends ZIOApplication {
       def printTree(level: Int, node: Node[A]): Unit =
         if (node != null) {
           val indent = if (level == 0) "" else " ".repeat(level) + s"$level" + "-".repeat(level)
-          println(s"$indent Node: ${node.value}")
+          println(s"$indent Node: ${node.value} Sum: ${node.sum}")
           printTree(level + 1, node.left)
           printTree(level + 1, node.right)
         }
@@ -19,7 +19,7 @@ object Tree extends ZIOApplication {
       def format(level: Int, node: Node[A]): String =
         if (node != null) {
           val indent = if (level == 0) "" else " ".repeat(level) + s"$level" + "-".repeat(level)
-          s"$indent Node: ${node.value}\n" +
+          s"$indent Node: ${node.value} Sum: ${node.sum}\n" +
             format(level + 1, node.left) +
             format(level + 1, node.right)
         } else {
@@ -35,27 +35,20 @@ object Tree extends ZIOApplication {
     Node(3, Node(6, Node(7, null, null), Node(8, null, Node(9, null, null))), null)
   )
 
-  def preOrder(n: Node[Int]): UIO[Int] = {
+  def sum(n: Node[Int]): UIO[Int] = {
     if (n == null)
       ZIO.succeed(0)
     else {
       for {
-        _ <- ZIO.logDebug(s"Node ${n.value}")
-        v <-
-          if (n.left == null && n.right == null)
-            ZIO.succeed(n.value)
-          else
-            ZIO.succeed(0)
-        z <- preOrder(n.left).zipPar(preOrder(n.right))
-        z1 <- ZIO.succeed(z._1 + z._2 + v)
+        z <- sum(n.left).zipPar(sum(n.right))
+        z1 <- ZIO.succeed(z._1 + z._2 + n.value)
         _ <- ZIO.succeed(n.sum = z1)
-        _ <- ZIO.logInfo(s"Node: $n z1 = $z1")
       } yield (z1)
     }
   }
 
   def run = for {
-    res <- preOrder(tree)
+    res <- sum(tree)
     _ <- ZIO.logInfo(s"Res = $res")
     _ <- ZIO.logInfo(s"Tree = $tree")
     s <- ZIO.succeed(tree.format)
