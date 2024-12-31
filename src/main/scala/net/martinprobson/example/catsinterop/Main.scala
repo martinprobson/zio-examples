@@ -17,8 +17,9 @@ object Main extends ZIOApplication {
       "com.mysql.cj.jdbc.Driver",
       "jdbc:mysql://localhost:3306/test2",
       "root",
-      "root"
+      "root", None: Option[LogHandler[Task]]
     )
+
 
   private def createTable: ConnectionIO[Int] =
     sql"""

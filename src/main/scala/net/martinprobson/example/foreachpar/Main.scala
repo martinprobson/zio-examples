@@ -12,7 +12,7 @@ object Main extends ZIOApplication:
   //}
 
   val run = {
-    val r = Range(1, 20000).toList
+    val r = Range(2, 20000).toList
       .map { i => User(UserName(s"User-$i"), Email(s"email-$i")) }
     ZIO.foreachPar(r)(u => ZIO.blocking(ZIO.logInfo(s"User: $u")))
   }
